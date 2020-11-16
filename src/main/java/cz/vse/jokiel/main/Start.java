@@ -17,6 +17,7 @@ import javafx.*;
 public class Start
 {
     /**
+     *
      * Metoda pro spuštění celé aplikace.
      *
      * @param args parametry aplikace z příkazového řádku
