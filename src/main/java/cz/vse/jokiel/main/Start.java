@@ -30,9 +30,6 @@ public class Start
     }
 
 
-
-
-
     private Start() {}
 
 }
