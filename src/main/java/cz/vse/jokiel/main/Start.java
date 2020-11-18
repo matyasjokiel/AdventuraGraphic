@@ -1,5 +1,6 @@
 package cz.vse.jokiel.main;
 
+import cz.vse.jokiel.MainController;
 import cz.vse.jokiel.model.Game;
 import cz.vse.jokiel.model.IGame;
 import cz.vse.jokiel.textui.TextUI;
@@ -58,7 +59,9 @@ public class Start extends Application
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
-
+        MainController controller = loader.getController();
+        IGame hra = new Game();
+        controller.init(hra);
         primaryStage.show();
 
     }
