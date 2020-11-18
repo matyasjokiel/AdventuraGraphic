@@ -3,7 +3,7 @@ package cz.vse.jokiel.main;
 import cz.vse.jokiel.model.Game;
 import cz.vse.jokiel.model.IGame;
 import cz.vse.jokiel.textui.TextUI;
-import javafx.*;
+
 
 /**
  * Hlavní třída určená pro spuštění hry. Obsahuje pouze statickou metodu
