@@ -3,7 +3,16 @@ package cz.vse.jokiel.main;
 import cz.vse.jokiel.model.Game;
 import cz.vse.jokiel.model.IGame;
 import cz.vse.jokiel.textui.TextUI;
-import javafx.*;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+
 
 /**
  * Hlavní třída určená pro spuštění hry. Obsahuje pouze statickou metodu
@@ -14,7 +23,7 @@ import javafx.*;
  * @author Jan Říha
  * @version LS 2020
  */
-public class Start
+public class Start extends Application
 {
     /**
      *
@@ -24,12 +33,34 @@ public class Start
      */
     public static void main(String[] args)
     {
-        IGame game = new Game();
-        TextUI ui = new TextUI(game);
-        ui.play();
+        List<String> flags = Arrays.asList(args);
+
+        if(flags.contains("text")) {
+            IGame game = new Game();
+            TextUI ui = new TextUI(game);
+            ui.play();
+        } else {
+            launch();
+        }
     }
 
 
-    private Start() {}
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+        primaryStage.setFullScreen(true);
+        primaryStage.setTitle("Det. Meyers");
+
+        FXMLLoader loader = new FXMLLoader();
+        InputStream stream = getClass().getClassLoader().getResourceAsStream("scene.fxml");
+        Parent root = loader.load(stream);
+
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+
+
+        primaryStage.show();
+
+    }
 
 }
