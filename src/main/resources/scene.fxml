@@ -28,7 +28,7 @@
             </VBox>
             <!--Batoh-->
             <!--Predmety-->
-            <VBox spacing="10">
+            <VBox fx:id="itemsBox" spacing="10">
                 <Label>
                     <font>
                         <Font name="System Bold" size="14.0"/>
@@ -39,12 +39,23 @@
                     <!--Sem se budou vkladat predmety v dane lokaci-->
                 </VBox>
             </VBox>
+            <VBox fx:id="searchBox" spacing="10">
+                <Label>
+                    <font>
+                        <Font name="System Bold" size="14.0"/>
+                    </font>
+                    Můžeš prohledat:
+                </Label>
+                <VBox fx:id="search" spacing="10">
+
+                </VBox>
+            </VBox>
         </VBox>
     </right>
     <left>
         <VBox spacing="30">
             <!--NPCs-->
-            <VBox spacing="10">
+            <VBox fx:id="npcsBox" spacing="10">
                 <Label>
                     <font>
                         <Font name="System Bold" size="14.0"/>
@@ -57,7 +68,7 @@
             </VBox>
 
             <!--U sebe mas-->
-            <VBox spacing="10">
+            <VBox fx:id="backpackBox" spacing="10">
                 <Label>
                     <font>
                         <Font name="System Bold" size="14.0"/>
