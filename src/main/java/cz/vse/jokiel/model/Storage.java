@@ -26,6 +26,14 @@ public class Storage
         this.name = storageName;
         this.isAccessible = isAccessible;
     }
+
+    /**
+     * Metoda vrací set itemů
+     * @return set items
+     */
+    public Set<Item> getItemSet(){
+        return items;
+    }
     
     /***************************************************************************
      * Metoda vrací přístupnost úložiště.
@@ -76,12 +84,7 @@ public class Storage
      */
     public boolean isInStorage(Item item)
     {
-        if(items.contains(item))
-        {
-            return true;
-        }
-        
-        return false;
+        return items.contains(item);
     }
     
     /***************************************************************************

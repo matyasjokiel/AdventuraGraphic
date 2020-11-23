@@ -295,9 +295,9 @@ public class Area
     }
     
     /**
-     * Metoda vrací jaké východy má aktuální lokace
+     * Metoda vrací jaké východy má aktuální lokace jako String
      *
-     * @return jaké východy má aktuální lokace
+     * @return jaké východy má aktuální lokace String
      */
     public String getExits()
     {
@@ -311,6 +311,15 @@ public class Area
         }
         
         return exitNames;
+    }
+
+    /**
+     * Metoda vrací jaké východy má aktuální lokace jako Set
+     * @return set exitů
+     */
+    public Set<Area> getExitsSet()
+    {
+        return exits;
     }
     
     /**

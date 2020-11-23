@@ -1,14 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller=""
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane stylesheets="style.css"
+            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cz.vse.jokiel.MainController">
+    <top>
+        <VBox BorderPane.alignment="CENTER">
+            <Label fx:id="locationName" />
+            <Label fx:id="locationDescription" />
+        </VBox>
+    </top>
+    <right>
+        <VBox spacing="30">
+            <!--Vychody-->
+            <VBox spacing="10">
+                <Label>
+                    <font>
+                        <Font name="System Bold" size="14.0"/>
+                    </font>
+                    Vychody
+                </Label>
+                <VBox fx:id="exits" spacing="10">
+                    <!--Sem se budou vkladat vychody-->
+                </VBox>
+            </VBox>
+            <!--Batoh-->
+            <!--Predmety-->
+            <VBox spacing="10">
+                <Label>
+                    <font>
+                        <Font name="System Bold" size="14.0"/>
+                    </font>
+                    Predmety
+                </Label>
+                <VBox fx:id="items" spacing="10">
+                    <!--Sem se budou vkladat predmety v dane lokaci-->
+                </VBox>
+            </VBox>
+        </VBox>
+    </right>
+    <left>
+        <VBox spacing="30">
+            <!--NPCs-->
+            <VBox spacing="10">
+                <Label>
+                    <font>
+                        <Font name="System Bold" size="14.0"/>
+                    </font>
+                    Můžeš mluvit s:
+                </Label>
+                <VBox fx:id="npcs" spacing="10">
+                    <!--Sem se budou vkladat npc-->
+                </VBox>
+            </VBox>
 
-</AnchorPane>
+            <!--U sebe mas-->
+            <VBox spacing="10">
+                <Label>
+                    <font>
+                        <Font name="System Bold" size="14.0"/>
+                    </font>
+                    U sebe máš:
+                </Label>
+                <VBox fx:id="backpack" spacing="10">
+                    <!--Sem se budou vkladat veci-->
+                </VBox>
+
+            </VBox>
+        </VBox>
+    </left>
+    <bottom>
+        <VBox>
+            <TextArea fx:id="textOutput" editable="false"/>
+            <TextField fx:id="textInput" onKeyPressed="#onInputKeyPressed"/>
+        </VBox>
+    </bottom>
+</BorderPane>
