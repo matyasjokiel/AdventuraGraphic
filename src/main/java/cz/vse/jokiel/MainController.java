@@ -1,6 +1,6 @@
 package cz.vse.jokiel;
 
-import com.sun.deploy.panel.RuleSetViewerDialog;
+
 import cz.vse.jokiel.model.*;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -36,6 +36,8 @@ public class MainController {
     public VBox backpackBox;
     public VBox search;
     public VBox searchBox;
+    public VBox use;
+    public VBox useBox;
 
 
     public void init(IGame game) {
@@ -56,11 +58,24 @@ public class MainController {
         backpackBox.setVisible(false);
         itemsBox.setVisible(false);
         searchBox.setVisible(false);
+        useBox.setVisible(false);
 
         updateExits();
         updateItems();
         updateNpcs();
         updateBackpack();
+        updateUse();
+    }
+
+    private void updateUse() {
+        use.getChildren().clear();
+
+        switch (getCurrentArea().getName()){
+            case "Policejni_stanice":
+
+                break;
+
+        }
     }
 
     private void updateBackpack() {
@@ -210,6 +225,5 @@ public class MainController {
             textInput.setText("");
         }
     }
-
-
+    
 }

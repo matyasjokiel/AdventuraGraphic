@@ -32,7 +32,7 @@ public class CommandUse implements ICommand
     /**
      * Metoda zjistí z parametru jaký předmět chce hráč použít a následně vykoná všechny operace, které jsou s tí předmětem spojeny.
      *
-     * @param jaký předmět chce hráč použít
+     * @param //jaký předmět chce hráč použít
      * @return výsledek příkazu jako String
      */
     @Override

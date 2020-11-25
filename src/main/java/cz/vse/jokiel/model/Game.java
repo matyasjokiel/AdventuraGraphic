@@ -43,45 +43,30 @@ public class Game implements IGame
         listOfCommands.addCommand(new CommandTalk(gamePlan));
         listOfCommands.addCommand(new CommandUse(gamePlan, this));
         
-        System.out.println(
-         " _____       _       __  __                          \n"
-         +"|  __ \\     | |     |  \\/  |                         \n"
-         +"| |  | | ___| |_    | \\  / | ___ _   _  ___ _ __ ___ \n"
-         +"| |  | |/ _ \\ __|   | |\\/| |/ _ \\ | | |/ _ \\ '__/ __|\n"
-         +"| |__| |  __/ |_ _  | |  | |  __/ |_| |  __/ |  \\__ \\\n"
-         +"|_____/ \\___|\\__(_) |_|  |_|\\___|\\__, |\\___|_|  |___/\n"
-         +"                                  __/ |              \n"
-         +"Author: Matyáš Jokiel            |___/               \n"
-         +"\nChoose difficulty:\n(1) Easy\n(2) Medium\n(3) Hard\n");
- 
-         String line = readLine();
-         
-         while(!(line.equals("1") || line.equals("2") || line.equals("3")))
-        {
-            System.out.println("Choose difficulty:\n(1) Easy\n(2) Medium\n(3) Hard\n");
-            line = readLine();
-        }
- 
-        switch(line)
-        {
-            case "1": difficulty = 3;break;
-            case "2": difficulty = 2;break;
-            case "3": difficulty = 1;break;
-            default: break;
-        }
+
     }
 
-    /**
-     * Pomocná metoda pro čtení příkazů z konzole.
-     *
-     * @return řádek textu z konzole
-     */
-    private String readLine()
+    public Game(int difficulty)
     {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("> ");
-        return scanner.nextLine();
+        gameOver = false;
+        gamePlan = new GamePlan();
+        listOfCommands = new ListOfCommands();
+        this.difficulty = difficulty;
+
+        listOfCommands.addCommand(new CommandHelp(listOfCommands, gamePlan));
+        listOfCommands.addCommand(new CommandTerminate(this));
+        listOfCommands.addCommand(new CommandMove(gamePlan, this));
+        listOfCommands.addCommand(new CommandTake(gamePlan));
+        listOfCommands.addCommand(new CommandThrowAway(gamePlan));
+        listOfCommands.addCommand(new CommandInventory(gamePlan));
+        listOfCommands.addCommand(new CommandSearch(gamePlan));
+        listOfCommands.addCommand(new CommandTalk(gamePlan));
+        listOfCommands.addCommand(new CommandUse(gamePlan, this));
+
+
     }
+
+
     
     /**
      * Metoda vrací obtížnost hry.

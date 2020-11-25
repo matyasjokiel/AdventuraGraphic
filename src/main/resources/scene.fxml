@@ -80,6 +80,18 @@
                 </VBox>
 
             </VBox>
+            <VBox fx:id="useBox" spacing="10">
+                <Label>
+                    <font>
+                        <Font name="System Bold" size="14.0"/>
+                    </font>
+                    Můžeš použít:
+                </Label>
+                <VBox fx:id="use" spacing="10">
+                    <!--Sem se budou vkladat veci-->
+                </VBox>
+
+            </VBox>
         </VBox>
     </left>
     <bottom>

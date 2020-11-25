@@ -331,15 +331,15 @@ public class Area
      */
     public String getFullDescription()
     {
-        String exitNames = "Východy:";
+        //String exitNames = "Východy:";
         String npcsYouCanTalkWith = "Můžeš mluvit s:";
-        for (Area exitArea : exits) 
+        /*for (Area exitArea : exits)
         {
             if(exitArea.isAccessible() && !exitArea.getName().equals("Sklad_619"))
             {
                 exitNames += " " + exitArea.getName();
             }
-        }
+        }*/
         
         for (NPC clovek : npcs) 
             {
@@ -355,13 +355,13 @@ public class Area
             
             return "Jsi v lokaci (místnosti) " + name + ".\n"
                 + description + "\n\n"
-                + npcsYouCanTalkWith + "\n\n"
-                + exitNames;
+                + npcsYouCanTalkWith + "\n\n";
+                //+ exitNames;
         }
         
         return "Jsi v lokaci (místnosti) " + name + ".\n"
-                + description + "\n\n"
-                + exitNames;
+                + description + "\n\n";
+                //+ exitNames;
     }
     
     /**

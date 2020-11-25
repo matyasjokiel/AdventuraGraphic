@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 
 /**
@@ -37,7 +38,33 @@ public class Start extends Application
         List<String> flags = Arrays.asList(args);
 
         if(flags.contains("text")) {
-            IGame game = new Game();
+            System.out.println(
+                    " _____       _       __  __                          \n"
+                            +"|  __ \\     | |     |  \\/  |                         \n"
+                            +"| |  | | ___| |_    | \\  / | ___ _   _  ___ _ __ ___ \n"
+                            +"| |  | |/ _ \\ __|   | |\\/| |/ _ \\ | | |/ _ \\ '__/ __|\n"
+                            +"| |__| |  __/ |_ _  | |  | |  __/ |_| |  __/ |  \\__ \\\n"
+                            +"|_____/ \\___|\\__(_) |_|  |_|\\___|\\__, |\\___|_|  |___/\n"
+                            +"                                  __/ |              \n"
+                            +"Author: Matyáš Jokiel            |___/               \n"
+                            +"\nChoose difficulty:\n(1) Easy\n(2) Medium\n(3) Hard\n");
+
+            String line = readLine();
+
+            while(!(line.equals("1") || line.equals("2") || line.equals("3")))
+            {
+                System.out.println("Choose difficulty:\n(1) Easy\n(2) Medium\n(3) Hard\n");
+                line = readLine();
+            }
+            IGame game = null;
+            switch(line)
+            {
+                case "1": game = new Game(3);break;
+                case "2": game = new Game(2);break;
+                case "3": game = new Game(1);break;
+                default: break;
+            }
+
             TextUI ui = new TextUI(game);
             ui.play();
         } else {
@@ -60,10 +87,22 @@ public class Start extends Application
         primaryStage.setScene(scene);
 
         MainController controller = loader.getController();
-        IGame game = new Game();
+        IGame game = new Game(2);
         controller.init(game);
         primaryStage.show();
 
+    }
+
+    /**
+     * Pomocná metoda pro čtení příkazů z konzole.
+     *
+     * @return řádek textu z konzole
+     */
+    private static String readLine()
+    {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("> ");
+        return scanner.nextLine();
     }
 
 }
