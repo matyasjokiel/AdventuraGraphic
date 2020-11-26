@@ -14,7 +14,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.Set;
 
 public class MainController {
@@ -22,6 +21,7 @@ public class MainController {
 
     public TextArea textOutput;
     public TextField textInput;
+    public String input;
     private IGame game;
 
     public Label locationName;
@@ -46,7 +46,7 @@ public class MainController {
 
     }
 
-    private void update() {
+    public void update() {
         String location = getCurrentArea().getName();
         locationName.setText(location);
 
@@ -221,9 +221,16 @@ public class MainController {
 
     public void onInputKeyPressed(KeyEvent keyEvent) {
         if(keyEvent.getCode() == KeyCode.ENTER) {
-            executeCommand(textInput.getText());
+            input = textInput.getText();
+            executeCommand(input);
             textInput.setText("");
         }
     }
-    
+
+    public void setTextOutput(String text){
+        textOutput.appendText(text + "\n");
+        update();
+    }
+
+
 }

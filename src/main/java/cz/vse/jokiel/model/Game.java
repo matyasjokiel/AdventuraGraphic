@@ -1,5 +1,7 @@
 package cz.vse.jokiel.model;
 
+import cz.vse.jokiel.MainController;
+
 import java.util.*;
 /**
  * Hlavní třída logiky aplikace. Třída vytváří instanci třídy {@link GamePlan},
@@ -20,6 +22,7 @@ public class Game implements IGame
 {
     private ListOfCommands listOfCommands;
     private GamePlan gamePlan;
+    private MainController controller;
     private boolean gameOver;
     private int difficulty;
 
@@ -65,6 +68,27 @@ public class Game implements IGame
 
 
     }
+    public Game(int difficulty, MainController controller)
+    {
+        gameOver = false;
+        gamePlan = new GamePlan();
+        listOfCommands = new ListOfCommands();
+        this.difficulty = difficulty;
+        this.controller = controller;
+
+        listOfCommands.addCommand(new CommandHelp(listOfCommands, gamePlan));
+        listOfCommands.addCommand(new CommandTerminate(this));
+        listOfCommands.addCommand(new CommandMove(gamePlan, this));
+        listOfCommands.addCommand(new CommandTake(gamePlan));
+        listOfCommands.addCommand(new CommandThrowAway(gamePlan));
+        listOfCommands.addCommand(new CommandInventory(gamePlan));
+        listOfCommands.addCommand(new CommandSearch(gamePlan));
+        listOfCommands.addCommand(new CommandTalk(gamePlan));
+        listOfCommands.addCommand(new CommandUse(gamePlan, this));
+        listOfCommands.addCommand(new CommandUseGraphic(gamePlan, this));
+
+
+    }
 
 
     
@@ -77,6 +101,8 @@ public class Game implements IGame
     {
         return difficulty;
     }
+
+    public MainController getController(){return controller;}
     
     /**
      * @return Prolog

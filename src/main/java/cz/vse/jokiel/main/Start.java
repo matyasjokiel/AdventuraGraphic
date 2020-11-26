@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
@@ -76,7 +77,7 @@ public class Start extends Application
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        primaryStage.setFullScreen(true);
+
         primaryStage.setTitle("Det. Meyers");
 
         FXMLLoader loader = new FXMLLoader();
@@ -87,7 +88,7 @@ public class Start extends Application
         primaryStage.setScene(scene);
 
         MainController controller = loader.getController();
-        IGame game = new Game(2);
+        IGame game = new Game(2, controller);
         controller.init(game);
         primaryStage.show();
 
