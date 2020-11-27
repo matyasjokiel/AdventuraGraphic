@@ -98,21 +98,18 @@ public class CommandUseGraphic implements ICommand
         {
             if(plan.getCurrentArea().getName().equals("Policejni_stanice"))
             {
-                if(plan.getCurrentArea().getStorage("Skrinka").isAccessible())
-                {
-                    plan.getItem("Zbran").setAccesibility(false);
-                    plan.getItem("Pouta").setAccesibility(false);
-                    plan.getCurrentArea().getStorage("Skrinka").setAccessibility(false);
-                    return "Zamkl jsi svou skříňku.";
-                }
-                    
-                else
-                {
-                    plan.getItem("Zbran").setAccesibility(true);
-                    plan.getItem("Pouta").setAccesibility(true);
-                    plan.getCurrentArea().getStorage("Skrinka").setAccessibility(true);
-                    return "Odemkl jsi svou skříňku.";
-                }
+               if(!plan.getCurrentArea().getStorage("Skrinka").isAccessible()) {
+
+                   plan.getCurrentArea().getStorage("Skrinka").setAccessibility(true);
+                   plan.getItem("Zbran").setAccesibility(true);
+                   plan.getItem("Pouta").setAccesibility(true);
+                   return "Odemkl jsi svou skříňku.";
+               }
+               else
+               {
+                   return "Už je odemčená";
+               }
+
                 
             }
             else
@@ -187,21 +184,21 @@ public class CommandUseGraphic implements ICommand
     {
         if(plan.getCurrentArea().getName().equals("Policejni_stanice"))
         {
-            if(plan.getBackpack().howManyItemsInStorage() < 5)
-            {
-                if(plan.getBackpack().isInStorage("Prazdny_kelimek"))
-                {
-                    game.getController().setTextOutput("Použil jsi Prazdny_kelimek");
-                    plan.getBackpack().removeItem(plan.getBackpack().getItem("Prazdny_kelimek"));
+            if(plan.getBackpack().isInStorage("Kelimek_s_kafem"))
+            {return "Už jedno kafe máš.";}
+            else {
+                if (plan.getBackpack().howManyItemsInStorage() < 5) {
+                    if (plan.getBackpack().isInStorage("Prazdny_kelimek")) {
+                        game.getController().setTextOutput("Použil jsi Prazdny_kelimek");
+                        plan.getBackpack().removeItem(plan.getBackpack().getItem("Prazdny_kelimek"));
+                    }
+                    game.getController().setTextOutput("Please stand by. Your coffee is being made.");
+                    // try{waitSec(2000);}catch(InterruptedException e){game.getController().setTextOutput("");}
+                    plan.getBackpack().addItem(new Item("Kelimek_s_kafem"));
+                    return "Vzal jsi Kelimek_s_kafem";
+                } else {
+                    return "Bohužel víc věcí už neuneseš. Nějakou odhoď.";
                 }
-                game.getController().setTextOutput("Please stand by. Your coffee is being made.");
-                try{waitSec(2000);}catch(InterruptedException e){game.getController().setTextOutput("");}
-                plan.getBackpack().addItem(new Item("Kelimek_s_kafem"));
-                return "Vzal jsi Kelimek_s_kafem";
-            }
-            else
-            {
-                return "Bohužel víc věcí už neuneseš. Nějakou odhoď.";
             }
         }
         else

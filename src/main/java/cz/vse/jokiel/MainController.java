@@ -72,10 +72,47 @@ public class MainController {
 
         switch (getCurrentArea().getName()){
             case "Policejni_stanice":
+                Label computer = new Label("Pocitac");
+                computer.setCursor(Cursor.HAND);
+                computer.setOnMouseClicked(event -> executeCommand("pouzijGraphic Pocitac"));
+                use.getChildren().add(computer);
 
+                if(game.getGamePlan().getBackpack().isInStorage("Klic_ke_skrince")) {
+                    Label klic = new Label("Klic_ke_skrince");
+                    klic.setCursor(Cursor.HAND);
+                    klic.setOnMouseClicked(event -> executeCommand("pouzijGraphic Klic_ke_skrince"));
+                    use.getChildren().add(klic);
+                }
+                Label automat = new Label("Automat_na_kafe");
+                automat.setCursor(Cursor.HAND);
+                automat.setOnMouseClicked(event -> executeCommand("pouzijGraphic Automat_na_kafe"));
+                use.getChildren().add(automat);
+                if(game.getGamePlan().getBackpack().isInStorage("Kelimek_s_kafem")) {
+                    Label plnykafe = new Label("Kelimek_s_kafem");
+                    plnykafe.setCursor(Cursor.HAND);
+                    plnykafe.setOnMouseClicked(event -> executeCommand("pouzijGraphic Kelimek_s_kafem"));
+                    use.getChildren().add(plnykafe);
+                }
+
+                useBox.setVisible(true);
                 break;
+            case "Sklad_619":
+                Label cip = new Label("Kopie_cipu");
+                cip.setCursor(Cursor.HAND);
+                cip.setOnMouseClicked(event -> executeCommand("pouzijGraphic Kopie_cipu"));
+                use.getChildren().add(cip);
+                useBox.setVisible(true);
+                break;
+        }
+        if(game.getGamePlan().getBackpack().isInStorage("Zbran")){
+            Label zbran = new Label("Zbran");
+            zbran.setCursor(Cursor.HAND);
+            zbran.setOnMouseClicked(event -> executeCommand("pouzijGraphic Zbran"));
+            use.getChildren().add(zbran);
+            useBox.setVisible(true);
 
         }
+
     }
 
     private void updateBackpack() {
@@ -93,7 +130,9 @@ public class MainController {
 
             backpack.getChildren().add(itemLabel);
             backpackBox.setVisible(true);
+
         }
+        updateItems();
     }
 
     private void updateNpcs() {
@@ -123,23 +162,30 @@ public class MainController {
 
         for (Area area : exitList) {
             if(area.isAccessible()) {
+                /*if(area.getName().equals("Sklad_619")) {
+                    Label exitLabel = new Label("Sklad_XXX");
+                    exitLabel.setCursor(Cursor.HAND);
 
-                String exitName = area.getName();
-                Label exitLabel = new Label(exitName);
-                exitLabel.setCursor(Cursor.HAND);
+                }*/
 
-                InputStream stream = getClass().getClassLoader().getResourceAsStream(exitName + ".jpg");
-                Image img = new Image(stream);
-                ImageView imageView = new ImageView(img);
-                imageView.setFitWidth(60);
-                imageView.setFitHeight(40);
-                exitLabel.setGraphic(imageView);
+                    String exitName = area.getName();
+                    Label exitLabel = new Label(exitName);
+                    exitLabel.setCursor(Cursor.HAND);
 
-                exitLabel.setOnMouseClicked(event -> {
-                    executeCommand("jed " + exitName);
-                });
 
-                exits.getChildren().add(exitLabel);
+                    InputStream stream = getClass().getClassLoader().getResourceAsStream(exitName + ".jpg");
+                    Image img = new Image(stream);
+                    ImageView imageView = new ImageView(img);
+                    imageView.setFitWidth(60);
+                    imageView.setFitHeight(40);
+                    exitLabel.setGraphic(imageView);
+
+                    exitLabel.setOnMouseClicked(event -> {
+                        executeCommand("jedGraphic " + exitName);
+                    });
+
+                    exits.getChildren().add(exitLabel);
+
             }
         }
 
@@ -179,8 +225,6 @@ public class MainController {
                 storageLabel.setCursor(Cursor.HAND);
                 storageLabel.setOnMouseClicked(event -> {
                     storage.setAccessibility(false);
-
-
                     Set<Item> itemsInStorage = storage.getItemSet();
 
                     for(Item item : itemsInStorage){
@@ -194,10 +238,11 @@ public class MainController {
                                 executeCommand("vezmi "+itemName);
                             });
                         }
-                        getCurrentArea().removeItemFromAllStorages(item.getName());
                         getCurrentArea().addItem(item);
-                        update();
+
                     }
+
+                    update();
                 });
 
                 search.getChildren().add(storageLabel);

@@ -79,6 +79,7 @@ public class Game implements IGame
         listOfCommands.addCommand(new CommandHelp(listOfCommands, gamePlan));
         listOfCommands.addCommand(new CommandTerminate(this));
         listOfCommands.addCommand(new CommandMove(gamePlan, this));
+        listOfCommands.addCommand(new CommandMoveGraphic(gamePlan, this));
         listOfCommands.addCommand(new CommandTake(gamePlan));
         listOfCommands.addCommand(new CommandThrowAway(gamePlan));
         listOfCommands.addCommand(new CommandInventory(gamePlan));

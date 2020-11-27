@@ -84,12 +84,12 @@ public class ComputerGraphic
     
     private void switcheroo(String text)
     {
-        if(text.equals("1")){
-            policeDatabaseStart();
+
+        switch (text){
+            case "1":policeDatabaseStart();break;
+            case "2":addressDecoderStart();break;
         }
-        if(text.equals("2")){
-            addressDecoderStart();
-        }
+
        // computer.close();
 
     }
@@ -145,22 +145,22 @@ public class ComputerGraphic
         }
         else if(text.equals("John Meyers"))
         {
-            textOutput.appendText("         XXXXXXXX\n"
-                    +"       XXX      XXX\n"
-                    +"      XX            XX\n"
-                    +"     XX              XX\n"
-                    +"    XX                XX\n"
-                    +"   XX                  XX\n"
-                    +"   X                    X\n"
-                    +"   X       EASTER       X\n"
-                    +"   X                    X\n"
-                    +"   X                    X\n"
-                    +"   XX                  XX\n"
-                    +"    X                  X\n"
-                    +"    XX                XX\n"
-                    +"     XXX             XX\n"
-                    +"       XXXXXXXXXXXXXXX\n\n");
-            textOutput.appendText("Yay you found it.");
+            textOutput.appendText("              XXXXXX\n"
+                    +"       XXX             XXX\n"
+                    +"      XX                   XX\n"
+                    +"     XX                     XX\n"
+                    +"    XX                       XX\n"
+                    +"   XX                         XX\n"
+                    +"   X                             X\n"
+                    +"   X       EASTER           X\n"
+                    +"   X                             X\n"
+                    +"   X                             X\n"
+                    +"   XX                          X\n"
+                    +"    X                          X\n"
+                    +"    XX                        XX\n"
+                    +"     XXX                    XX\n"
+                    +"       XXXXXXXXXXXX\n\n");
+            textOutput.appendText("Yay you found it."+"\n");
             textOutput.appendText("Name of suspect: (or \"exit\")\n");
         }
         else if(text.equals("exit"))
