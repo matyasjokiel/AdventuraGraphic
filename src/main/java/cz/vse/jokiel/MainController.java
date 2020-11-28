@@ -50,13 +50,19 @@ public class MainController {
     public Button help;
     public Button aboutGame;
 
-
+    /**
+     *  Metoda spousti update()
+     * @param game
+     */
     public void init(IGame game) {
         this.game = game;
         update();
 
     }
 
+    /**
+     * Hlavni metoda updatuje vse ostatni
+     */
     public void update() {
         String location = getCurrentArea().getName();
         locationName.setText(location);
@@ -91,6 +97,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Metoda zajistuje vypsaní souboru o Hře v novém okně
+     */
     private void aboutGame() {
         aboutGame.setOnMouseClicked(event -> {
             Stage oHre = new Stage();
@@ -107,12 +116,18 @@ public class MainController {
         });
     }
 
+    /**
+     * Metoda zajistuje button help
+     */
     private void help() {
         help.setOnMouseClicked(event -> {
             executeCommand("napoveda");
         });
     }
 
+    /**
+     * metoda zajistuje novou hru
+     */
     private void toolBar() {
 
         newGame.setOnMouseClicked(event -> {
@@ -124,6 +139,9 @@ public class MainController {
         }); ;
     }
 
+    /**
+     * metoda updatuje co muzes pouzit ve hre
+     */
     public void updateUse() {
         use.getChildren().clear();
 
@@ -182,6 +200,9 @@ public class MainController {
 
     }
 
+    /**
+     * metoda updatuje inventar
+     */
     private void updateBackpack() {
         Set<Item> itemSet = game.getGamePlan().getBackpack().getItemSet();
         backpack.getChildren().clear();
@@ -209,6 +230,9 @@ public class MainController {
         updateItems();
     }
 
+    /**
+     * metoda updatuje lidi s kterymi muzes mluvit
+     */
     private void updateNpcs() {
         Set<NPC> npcList = getCurrentArea().getNpcsInArea();
         npcs.getChildren().clear();
@@ -230,6 +254,9 @@ public class MainController {
         }
     }
 
+    /**
+     * metoda updatuje vychody
+     */
     private void updateExits() {
         Set<Area> exitList = getCurrentArea().getExitsSet();
         exits.getChildren().clear();
@@ -294,6 +321,9 @@ public class MainController {
 
     }
 
+    /**
+     * metoda updatuje predmety v lokaci
+     */
     private void updateItems() {
         Set<Storage> storageList = getCurrentArea().getStorages();
         items.getChildren().clear();
@@ -362,16 +392,28 @@ public class MainController {
     }
 
 
+    /**
+     * metoda vrací soucasnou lokaci
+     * @return current area
+     */
     private Area getCurrentArea() {
         return game.getGamePlan().getCurrentArea();
     }
 
+    /**
+     * metoda zpracovava prikaz
+     * @param command
+     */
     private void executeCommand(String command) {
         String result = game.processCommand(command);
         textOutput.appendText(result + "\n\n");
         update();
     }
 
+    /**
+     * metoda zpracovava stisknuti ENTER v text input
+     * @param keyEvent
+     */
     public void onInputKeyPressed(KeyEvent keyEvent) {
         if(keyEvent.getCode() == KeyCode.ENTER) {
             input = textInput.getText();
@@ -380,6 +422,10 @@ public class MainController {
         }
     }
 
+    /**
+     * metoda pridava text do text output
+     * @param text
+     */
     public void setTextOutput(String text){
         textOutput.appendText(text + "\n");
         update();

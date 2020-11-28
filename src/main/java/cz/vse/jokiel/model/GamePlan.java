@@ -76,7 +76,7 @@ public class GamePlan
         doky = new Area("Doky","Je tu dost skladů. Jestli nevíš číslo skladu, který hledáš pak se tam nedostaneš.");
         sklad = new Area("Sklad_619","Tohle by měl být sklad našeho zloděje, ale je zamknutý.");
         skladIn = new Area("Odemceny_sklad_619","Vejdeš dovnitř a vidíš hromadu ukradených šperků. Asi už víme, kdo vykrádal ty klenotnictví.\nVzadu na stole je kartička a na ní:\n\nIn case of need:\n9badb16da5680244d928e1bd64e9157bbe063721158f0193ed29687ae565504f");
-        hideOut = new Area("Skrys","Na zemi leží postřelený pachatel. Zpoutej ho a odvez na stanici.",true);
+        hideOut = new Area("Skrys","Na zemi leží postřelený pachatel. Zpoutej ho a odvez na stanici.");
         
        
         // Vytvoříme storages
