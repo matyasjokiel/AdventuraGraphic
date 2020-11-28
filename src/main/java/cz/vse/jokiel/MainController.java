@@ -4,15 +4,22 @@ package cz.vse.jokiel;
 import cz.vse.jokiel.main.Start;
 import cz.vse.jokiel.model.*;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
 
 public class MainController {
@@ -41,14 +48,21 @@ public class MainController {
 
     public Button newGame;
     public Button help;
+    public Button aboutGame;
 
-
+    /**
+     *  Metoda spousti update()
+     * @param game
+     */
     public void init(IGame game) {
         this.game = game;
         update();
 
     }
 
+    /**
+     * Hlavni metoda updatuje vse ostatni
+     */
     public void update() {
         String location = getCurrentArea().getName();
         locationName.setText(location);
@@ -69,14 +83,51 @@ public class MainController {
         updateUse();
         toolBar();
         help();
+        aboutGame();
+
+        if(game.isGameOver())
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Konec hry");
+            alert.setHeaderText(null);
+            alert.setContentText("Konec hry. Díky, že jste zahráli.");
+
+            alert.showAndWait();
+            System.exit(0);
+        }
     }
 
+    /**
+     * Metoda zajistuje vypsaní souboru o Hře v novém okně
+     */
+    private void aboutGame() {
+        aboutGame.setOnMouseClicked(event -> {
+            Stage oHre = new Stage();
+            oHre.setTitle("Det. Meyers - o hře");
+            oHre.initModality(Modality.APPLICATION_MODAL);
+            WebView browser = new WebView();
+
+            WebEngine webEngine = browser.getEngine();
+            webEngine.load(getClass().getResource("/aboutGame.html").toString());
+            Scene scene = new Scene(browser);
+            oHre.setScene(scene);
+            oHre.show();
+
+        });
+    }
+
+    /**
+     * Metoda zajistuje button help
+     */
     private void help() {
         help.setOnMouseClicked(event -> {
             executeCommand("napoveda");
         });
     }
 
+    /**
+     * metoda zajistuje novou hru
+     */
     private void toolBar() {
 
         newGame.setOnMouseClicked(event -> {
@@ -88,6 +139,9 @@ public class MainController {
         }); ;
     }
 
+    /**
+     * metoda updatuje co muzes pouzit ve hre
+     */
     public void updateUse() {
         use.getChildren().clear();
 
@@ -146,6 +200,9 @@ public class MainController {
 
     }
 
+    /**
+     * metoda updatuje inventar
+     */
     private void updateBackpack() {
         Set<Item> itemSet = game.getGamePlan().getBackpack().getItemSet();
         backpack.getChildren().clear();
@@ -154,6 +211,13 @@ public class MainController {
             String itemName = item.getName();
             Label itemLabel = new Label(itemName);
             itemLabel.setCursor(Cursor.HAND);
+
+            InputStream stream = getClass().getClassLoader().getResourceAsStream(itemName + ".jpg");
+            Image img = new Image(stream);
+            ImageView imageView = new ImageView(img);
+            imageView.setFitWidth(60);
+            imageView.setFitHeight(40);
+            itemLabel.setGraphic(imageView);
 
             itemLabel.setOnMouseClicked(event -> {
                 executeCommand("odhod " + itemName);
@@ -166,6 +230,9 @@ public class MainController {
         updateItems();
     }
 
+    /**
+     * metoda updatuje lidi s kterymi muzes mluvit
+     */
     private void updateNpcs() {
         Set<NPC> npcList = getCurrentArea().getNpcsInArea();
         npcs.getChildren().clear();
@@ -187,6 +254,9 @@ public class MainController {
         }
     }
 
+    /**
+     * metoda updatuje vychody
+     */
     private void updateExits() {
         Set<Area> exitList = getCurrentArea().getExitsSet();
         exits.getChildren().clear();
@@ -251,6 +321,9 @@ public class MainController {
 
     }
 
+    /**
+     * metoda updatuje predmety v lokaci
+     */
     private void updateItems() {
         Set<Storage> storageList = getCurrentArea().getStorages();
         items.getChildren().clear();
@@ -261,8 +334,15 @@ public class MainController {
             if(storage.getName().equals("Hlavni")) {
                 Set<Item> hlavniItems= storage.getItemSet();
                 for(Item item : hlavniItems) {
+
                     String itemName = item.getName();
                     Label itemLabel = new Label(itemName);
+                    InputStream stream = getClass().getClassLoader().getResourceAsStream(itemName + ".jpg");
+                    Image img = new Image(stream);
+                    ImageView imageView = new ImageView(img);
+                    imageView.setFitWidth(60);
+                    imageView.setFitHeight(40);
+                    itemLabel.setGraphic(imageView);
 
                     if(item.isAccesible()) {
                         itemLabel.setCursor(Cursor.HAND);
@@ -312,16 +392,28 @@ public class MainController {
     }
 
 
+    /**
+     * metoda vrací soucasnou lokaci
+     * @return current area
+     */
     private Area getCurrentArea() {
         return game.getGamePlan().getCurrentArea();
     }
 
+    /**
+     * metoda zpracovava prikaz
+     * @param command
+     */
     private void executeCommand(String command) {
         String result = game.processCommand(command);
         textOutput.appendText(result + "\n\n");
         update();
     }
 
+    /**
+     * metoda zpracovava stisknuti ENTER v text input
+     * @param keyEvent
+     */
     public void onInputKeyPressed(KeyEvent keyEvent) {
         if(keyEvent.getCode() == KeyCode.ENTER) {
             input = textInput.getText();
@@ -330,6 +422,10 @@ public class MainController {
         }
     }
 
+    /**
+     * metoda pridava text do text output
+     * @param text
+     */
     public void setTextOutput(String text){
         textOutput.appendText(text + "\n");
         update();

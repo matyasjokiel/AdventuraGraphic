@@ -12,6 +12,7 @@
                 <HBox>
                     <Button fx:id="newGame" text="Nová hra" />
                     <Button fx:id="help" text="Napověda" />
+                    <Button fx:id="aboutGame" text="O hře" />
                 </HBox>
 
             </ToolBar>
