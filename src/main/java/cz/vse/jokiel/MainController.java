@@ -191,6 +191,13 @@ public class MainController {
             Label itemLabel = new Label(itemName);
             itemLabel.setCursor(Cursor.HAND);
 
+            InputStream stream = getClass().getClassLoader().getResourceAsStream(itemName + ".jpg");
+            Image img = new Image(stream);
+            ImageView imageView = new ImageView(img);
+            imageView.setFitWidth(60);
+            imageView.setFitHeight(40);
+            itemLabel.setGraphic(imageView);
+
             itemLabel.setOnMouseClicked(event -> {
                 executeCommand("odhod " + itemName);
             });
@@ -297,8 +304,15 @@ public class MainController {
             if(storage.getName().equals("Hlavni")) {
                 Set<Item> hlavniItems= storage.getItemSet();
                 for(Item item : hlavniItems) {
+
                     String itemName = item.getName();
                     Label itemLabel = new Label(itemName);
+                    InputStream stream = getClass().getClassLoader().getResourceAsStream(itemName + ".jpg");
+                    Image img = new Image(stream);
+                    ImageView imageView = new ImageView(img);
+                    imageView.setFitWidth(60);
+                    imageView.setFitHeight(40);
+                    itemLabel.setGraphic(imageView);
 
                     if(item.isAccesible()) {
                         itemLabel.setCursor(Cursor.HAND);
