@@ -28,6 +28,8 @@ import java.util.Scanner;
  */
 public class Start extends Application
 {
+
+    public static Stage primaryStage;
     /**
      *
      * Metoda pro spuštění celé aplikace.
@@ -76,7 +78,7 @@ public class Start extends Application
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
+        this.primaryStage = primaryStage;
 
         primaryStage.setTitle("Det. Meyers");
 
@@ -84,15 +86,16 @@ public class Start extends Application
         InputStream stream = getClass().getClassLoader().getResourceAsStream("scene.fxml");
         Parent root = loader.load(stream);
 
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 1600,800);
         primaryStage.setScene(scene);
 
         MainController controller = loader.getController();
         IGame game = new Game(2, controller);
         controller.init(game);
         primaryStage.show();
-
     }
+
+
 
     /**
      * Pomocná metoda pro čtení příkazů z konzole.

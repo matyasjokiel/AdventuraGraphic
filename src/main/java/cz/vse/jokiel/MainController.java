@@ -1,17 +1,16 @@
 package cz.vse.jokiel;
 
 
+import cz.vse.jokiel.main.Start;
 import cz.vse.jokiel.model.*;
 import javafx.scene.Cursor;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.InputStream;
 import java.util.Set;
@@ -38,6 +37,10 @@ public class MainController {
     public VBox searchBox;
     public VBox use;
     public VBox useBox;
+    public Label zbran;
+
+    public Button newGame;
+    public Button help;
 
 
     public void init(IGame game) {
@@ -53,7 +56,6 @@ public class MainController {
         String description = getCurrentArea().getFullDescription();
         locationDescription.setText(description);
 
-
         npcsBox.setVisible(false);
         backpackBox.setVisible(false);
         itemsBox.setVisible(false);
@@ -65,9 +67,28 @@ public class MainController {
         updateNpcs();
         updateBackpack();
         updateUse();
+        toolBar();
+        help();
     }
 
-    private void updateUse() {
+    private void help() {
+        help.setOnMouseClicked(event -> {
+            executeCommand("napoveda");
+        });
+    }
+
+    private void toolBar() {
+
+        newGame.setOnMouseClicked(event -> {
+            Start.primaryStage.close();
+            try {
+                new Start().start( new Stage() );
+            } catch (Exception e) {
+            }
+        }); ;
+    }
+
+    public void updateUse() {
         use.getChildren().clear();
 
         switch (getCurrentArea().getName()){
@@ -97,18 +118,28 @@ public class MainController {
                 useBox.setVisible(true);
                 break;
             case "Sklad_619":
-                Label cip = new Label("Kopie_cipu");
-                cip.setCursor(Cursor.HAND);
-                cip.setOnMouseClicked(event -> executeCommand("pouzijGraphic Kopie_cipu"));
-                use.getChildren().add(cip);
-                useBox.setVisible(true);
-                break;
+                if(game.getGamePlan().getBackpack().isInStorage("Kopie_cipu")){
+                    Label cip = new Label("Kopie_cipu");
+                    cip.setCursor(Cursor.HAND);
+                    cip.setOnMouseClicked(event -> executeCommand("pouzijGraphic Kopie_cipu"));
+                    use.getChildren().add(cip);
+                    useBox.setVisible(true);
+                    break;
+                }
         }
         if(game.getGamePlan().getBackpack().isInStorage("Zbran")){
-            Label zbran = new Label("Zbran");
+            zbran = new Label("Zbran");
             zbran.setCursor(Cursor.HAND);
             zbran.setOnMouseClicked(event -> executeCommand("pouzijGraphic Zbran"));
             use.getChildren().add(zbran);
+            useBox.setVisible(true);
+
+        }
+        if(game.getGamePlan().getBackpack().isInStorage("Pouta")){
+            Label pouta = new Label("Pouta");
+            pouta.setCursor(Cursor.HAND);
+            pouta.setOnMouseClicked(event -> executeCommand("pouzijGraphic Pouta"));
+            use.getChildren().add(pouta);
             useBox.setVisible(true);
 
         }
@@ -162,18 +193,44 @@ public class MainController {
 
         for (Area area : exitList) {
             if(area.isAccessible()) {
-                /*if(area.getName().equals("Sklad_619")) {
-                    Label exitLabel = new Label("Sklad_XXX");
+                String exitName;
+                Label exitLabel;
+                InputStream stream;
+                if(area.getName().equals("Sklad_619")) {
+                    exitName = "Sklad_XXX";
+                    exitLabel = new Label(exitName);
                     exitLabel.setCursor(Cursor.HAND);
+                    stream = getClass().getClassLoader().getResourceAsStream("Sklad_619" + ".jpg");
+                    Image img = new Image(stream);
+                    ImageView imageView = new ImageView(img);
+                    imageView.setFitWidth(60);
+                    imageView.setFitHeight(40);
+                    exitLabel.setGraphic(imageView);
 
-                }*/
+                    exitLabel.setOnMouseClicked(event -> {
+                        TextInputDialog dialog = new TextInputDialog("");
+                        dialog.setTitle("Číslo skladu");
+                        dialog.setHeaderText(null);
+                        dialog.setGraphic(null);
+                        dialog.setContentText("Zadej číslo skladu:");
 
-                    String exitName = area.getName();
-                    Label exitLabel = new Label(exitName);
+                        dialog.showAndWait().ifPresent(name ->{
+                            if(name.equals("619")){
+                                game.getGamePlan().setCurrentArea(game.getGamePlan().getArea("Sklad_619"));
+                                update();
+                            }
+                            else{
+                                setTextOutput("Bohužel, zadal jsi špatné číslo skladu.");
+                            }
+                        });
+                    });
+
+                }
+                else {
+                    exitName = area.getName();
+                    exitLabel= new Label(exitName);
                     exitLabel.setCursor(Cursor.HAND);
-
-
-                    InputStream stream = getClass().getClassLoader().getResourceAsStream(exitName + ".jpg");
+                    stream = getClass().getClassLoader().getResourceAsStream(exitName + ".jpg");
                     Image img = new Image(stream);
                     ImageView imageView = new ImageView(img);
                     imageView.setFitWidth(60);
@@ -183,6 +240,7 @@ public class MainController {
                     exitLabel.setOnMouseClicked(event -> {
                         executeCommand("jedGraphic " + exitName);
                     });
+                }
 
                     exits.getChildren().add(exitLabel);
 
@@ -276,6 +334,7 @@ public class MainController {
         textOutput.appendText(text + "\n");
         update();
     }
+
 
 
 }

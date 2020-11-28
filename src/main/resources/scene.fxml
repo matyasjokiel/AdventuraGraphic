@@ -8,9 +8,17 @@
             xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cz.vse.jokiel.MainController">
     <top>
         <VBox BorderPane.alignment="CENTER">
+            <ToolBar>
+                <HBox>
+                    <Button fx:id="newGame" text="Nová hra" />
+                    <Button fx:id="help" text="Napověda" />
+                </HBox>
+
+            </ToolBar>
             <Label fx:id="locationName" />
             <Label fx:id="locationDescription" />
         </VBox>
+
     </top>
     <right>
         <VBox spacing="30">

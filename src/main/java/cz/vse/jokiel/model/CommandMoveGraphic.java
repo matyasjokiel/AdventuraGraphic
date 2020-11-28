@@ -1,6 +1,10 @@
 package cz.vse.jokiel.model;
 
+import javafx.application.Platform;
+
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Třída implementující příkaz pro pohyb mezi herními lokacemi.
@@ -33,7 +37,7 @@ public class CommandMoveGraphic implements ICommand
     /**
      * Metoda se pokusí přesunout hráče do jiné lokace. Pokud to nejde vrátí chybové hlášení
      *
-     * @param kam se chce hráč přesunout
+     * @param /kam se chce hráč přesunout
      * @return informace pro hráče, které se vypíšou na konzoli
      */
     @Override
@@ -95,34 +99,34 @@ public class CommandMoveGraphic implements ICommand
      *
      * @return informace pro hráče, které se vypíšou na konzoli
      */
-    private String shootOut() 
+    /*private String shootOut()
     {
         
         Thread thre1 = new Thread(new NewThreadGetInput());
         
-        System.out.println("Vykopnul jsi dveře. Vidíš chlapa jak vytahuje pistol. Střílej! Nebo je po tobě.");
+        game.getController().setTextOutput("Vykopnul jsi dveře. Vidíš chlapa jak vytahuje pistol. Střílej! Nebo je po tobě.");
         
         thre1.start();
         
         for(int i = game.getDifficulty()*5; i > 0; i--)
         {
-            System.out.println(i);
+            game.getController().setTextOutput(""+i);
             
             if(!thre1.isAlive())
             {
                 plan.setShootout(true);
                 return "Postřelil jsi pachatele do nohy. Je na zemi.\nZpoutej ho a odvez na stanici. Kluci ho vyslechnou a dají mu náplast.\n";
             }
-            try{waitSec(1000);}catch(InterruptedException e){System.out.println("");}
+            try{waitSec(1000);}catch(InterruptedException e){game.getController().setTextOutput("");}
         }
         
         thre1.interrupt();
-        System.out.println("Boooom! Cítíš bodavou bolest v hrudníku. Padáš k zemi. Tma.");
+        game.getController().setTextOutput("Boooom! Cítíš bodavou bolest v hrudníku. Padáš k zemi. Tma.");
         
         String input = "";
         while(!(input.equals("Y") || input.equals("N")))
         {
-            System.out.println("Chceš druhou šanci ? (Y/N)");
+            game.getController().setTextOutput("Chceš druhou šanci ? (Y/N)");
             input = readLine();
         }
         switch(input)
@@ -131,7 +135,30 @@ public class CommandMoveGraphic implements ICommand
             default: game.setGameOver(true);return "";
         }
         
+    }*/
+    private String shootOut()
+    {
+        game.getController().setTextOutput("Vykopnul jsi dveře. Vidíš chlapa jak vytahuje pistol. Střílej! Nebo je po tobě.");
+        Thread thre1 = new Thread(new NewThreadCountDown(game));
+        thre1.start();
+
+        for(int i = game.getDifficulty()*5; i > 0; i--)
+        {
+            game.getController().setTextOutput(""+i);
+
+            if(!thre1.isAlive())
+            {
+                plan.setShootout(true);
+                return "Postřelil jsi pachatele do nohy. Je na zemi.\nZpoutej ho a odvez na stanici. Kluci ho vyslechnou a dají mu náplast.\n";
+            }
+            try{waitSec(1000);}catch(InterruptedException e){game.getController().setTextOutput("");}
+        }
+        thre1.interrupt();
+        game.getController().setTextOutput("Boooom! Cítíš bodavou bolest v hrudníku. Padáš k zemi. Tma.");
+
+        return "";
     }
+
     
     /**
      * Metoda vrací název příkazu tj.&nbsp; slovo {@value NAME}.
