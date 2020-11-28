@@ -1,10 +1,10 @@
 package cz.vse.jokiel.model;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Třída implementující příkaz pro pohyb mezi herními lokacemi.
@@ -15,21 +15,19 @@ import java.util.TimerTask;
  * @author Matyáš Jokiel
  * @version LS 2020
  */
-public class CommandMoveGraphic implements ICommand
-{
+public class CommandMoveGraphic implements ICommand {
     private static final String NAME = "jedGraphic";
 
     private GamePlan plan;
     private Game game;
-    String line = "";
+    public Thread taskThread;
 
     /**
      * Konstruktor třídy.
      *
      * @param plan odkaz na herní plán s aktuálním stavem hry
      */
-    public CommandMoveGraphic(GamePlan plan, Game game)
-    {
+    public CommandMoveGraphic(GamePlan plan, Game game) {
         this.plan = plan;
         this.game = game;
     }
@@ -41,8 +39,7 @@ public class CommandMoveGraphic implements ICommand
      * @return informace pro hráče, které se vypíšou na konzoli
      */
     @Override
-    public String process(String... parameters)
-    {
+    public String process(String... parameters) {
         if (parameters.length == 0) {
             return "Musíš zadat kam chceš jet.";  // Pokud hráč nezadá žádný parametr (cíl cesty)
         } else if (parameters.length > 1) {
@@ -58,33 +55,29 @@ public class CommandMoveGraphic implements ICommand
         if (exitArea == null || !exitArea.isAccessible()) {
             return "Tam odsud jet nemůžes!";  // Pokud hráč zadal název lokace, která nesousedí s aktuální
         }
-        
-        if(!plan.getBackpack().isInStorage("Odznak"))
-        {
+
+        if (!plan.getBackpack().isInStorage("Odznak")) {
             return "Nemáš u sebe odznak. Takhle by tě nebral nikdo vážně.";
         }
-        
-        if(exitName.equals("Skrys") && !plan.getBackpack().isInStorage("Zbran"))
-        {
+
+        if (exitName.equals("Skrys") && !plan.getBackpack().isInStorage("Zbran")) {
             return "Možná by sis měl vzít zbraň. Nevíš co tě tam může potkat.";
         }
-        
-        if(exitName.equals("Skrys") && plan.getBackpack().isInStorage("Zbran") && !plan.getShootout())
-        {
+
+        if (exitName.equals("Skrys") && plan.getBackpack().isInStorage("Zbran") && !plan.getShootout()) {
             plan.setCurrentArea(exitArea);
             plan.setTrueWasInArea(exitArea);
-            
+
             return shootOut();
         }
-        
-        
-        if(exitName.equals("Policejni_stanice") && plan.getArea("Skrys").isAccessible() && plan.getNPC("Pachatel").getDialog(1).wasUsed())
-        {
+
+
+        if (exitName.equals("Policejni_stanice") && plan.getArea("Skrys").isAccessible() && plan.getNPC("Pachatel").getDialog(1).wasUsed()) {
             game.setGameOver(true);
             return "Dobrá práce. Ke všemu se přiznal.";
         }
-        
-        
+
+
         // Změníme aktuální lokaci (přesuneme hráče) a vrátíme popis nové lokace
         plan.setCurrentArea(exitArea);
         plan.setTrueWasInArea(exitArea);
@@ -96,8 +89,6 @@ public class CommandMoveGraphic implements ICommand
      * Je ovlivněna obtížností hry. Hráč má od 5ti sekund až do 15ti sekund na to
      * aby napsal do konzole "pouzij Zbran", čímž zastaví odpočet a střelí pachatele.
      * Když to nestihne včas, tak hráč umírá a končí hra. Má na výběr, jestli chce poslední část zkusit znovu.
-     *
-     * @return informace pro hráče, které se vypíšou na konzoli
      */
     /*private String shootOut()
     {
@@ -136,38 +127,39 @@ public class CommandMoveGraphic implements ICommand
         }
         
     }*/
-    private String shootOut()
-    {
+    private String shootOut() {
         game.getController().setTextOutput("Vykopnul jsi dveře. Vidíš chlapa jak vytahuje pistol. Střílej! Nebo je po tobě.");
-        Thread thre1 = new Thread(new NewThreadCountDown(game));
-        thre1.start();
+        taskThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+        for (int i = game.getDifficulty() * 5; i > 0; i--) {
 
-        for(int i = game.getDifficulty()*5; i > 0; i--)
-        {
-            game.getController().setTextOutput(""+i);
-
-            if(!thre1.isAlive())
-            {
-                plan.setShootout(true);
-                return "Postřelil jsi pachatele do nohy. Je na zemi.\nZpoutej ho a odvez na stanici. Kluci ho vyslechnou a dají mu náplast.\n";
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                game.getController().setTextOutput("");
             }
-            try{waitSec(1000);}catch(InterruptedException e){game.getController().setTextOutput("");}
+            final int print = i;
+            if(plan.getShootout())
+            {taskThread.stop();}
+            Platform.runLater(() -> game.getController().setTextOutput("" + print));
         }
-        thre1.interrupt();
-        game.getController().setTextOutput("Boooom! Cítíš bodavou bolest v hrudníku. Padáš k zemi. Tma.");
+        };});
+        taskThread.start();
 
         return "";
     }
 
-    
+
+
+
     /**
      * Metoda vrací název příkazu tj.&nbsp; slovo {@value NAME}.
      *
      * @return název příkazu
      */
     @Override
-    public String getName()
-    {
+    public String getName() {
         return NAME;
     }
 
@@ -176,20 +168,10 @@ public class CommandMoveGraphic implements ICommand
      *
      * @return řádek textu z konzole
      */
-    private String readLine()
-    {
+    private String readLine() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("> ");
         return scanner.nextLine();
     }
-    
-    /**
-     * Metoda čeká tolik milisekund, kolik jí předáme
-     * 
-     * @param mili kolik milisekund má vlákno spát
-     */
-    private void waitSec(int mili) throws InterruptedException
-    {
-        Thread.sleep(mili);  
-    }
+
 }

@@ -1,5 +1,6 @@
 package cz.vse.jokiel.model;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -49,35 +50,38 @@ public class ComputerGraphic
     public String start()
     {
         computer = new Stage();
+        computer.initModality(Modality.APPLICATION_MODAL);
         computer.setTitle("Computer");
-        computer.initModality(Modality.WINDOW_MODAL);
         vBox = new VBox();
         textInput = new TextField();
         textOutput = new TextArea();
+        textOutput.setPrefColumnCount(50);
+        textOutput.setPrefRowCount(20);
         textOutput.setEditable(false);
         vBox.getChildren().add(textOutput);
         vBox.getChildren().add(textInput);
         Scene scene = new Scene(vBox);
         computer.setScene(scene);
         computer.show();
-        
-        
-       // try{waitSec(500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
-        textOutput.appendText("Programs:" + "\n");
-       // try{waitSec(1000);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
-        textOutput.appendText("(1)  Police Database"+ "\n");
-       // try{waitSec(1000);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
-        textOutput.appendText("(2)  Address decoder"+ "\n");
-      //  try{waitSec(1000);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
-        textOutput.appendText("Which program do you want to use ? (Use appropriate numbers or \"exit\")\n\n");
 
-        textInput.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                text = textInput.getText();
-                textInput.setText("");
-                switcheroo(text);}
+        Thread taskThread = new Thread(() -> {
+            try{Thread.sleep(500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+            Platform.runLater(() ->textOutput.appendText("Programs:" + "\n"));
+            try{Thread.sleep(500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+            Platform.runLater(() ->textOutput.appendText("(1)  Police Database"+ "\n"));
+            try{Thread.sleep(500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+            Platform.runLater(() -> textOutput.appendText("(2)  Address decoder"+ "\n"));
+            try{Thread.sleep(500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+            Platform.runLater(() -> textOutput.appendText("Which program do you want to use ? (Use appropriate numbers or \"exit\")\n\n"));
+
+    textInput.setOnKeyPressed(event -> {
+        if (event.getCode() == KeyCode.ENTER) {
+            text = textInput.getText();
+            textInput.setText("");
+            switcheroo(text);}
+    });
         });
-
+        taskThread.start();
 
         return "Done";
     }
@@ -101,16 +105,17 @@ public class ComputerGraphic
      */
     public void policeDatabaseStart()
     {
-        
-          //  try{waitSec(1500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
-            textOutput.appendText("Police Database v1.0"+ "\n");
-          //  try{waitSec(1500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
-            textOutput.appendText("Status: Loading"+ "\n");
-          //  try{waitSec(1500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
-            textOutput.appendText("Status: Connected\n\n");
-            textOutput.appendText("Name of suspect: (or \"exit\")\n");
+        Thread taskThread = new Thread(() -> {
+    try{Thread.sleep(1000);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+    Platform.runLater(() -> textOutput.appendText("Police Database v1.0"+ "\n"));
+    try{Thread.sleep(1000);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+    Platform.runLater(() ->textOutput.appendText("Status: Loading"+ "\n"));
+    try{Thread.sleep(1500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+    Platform.runLater(() -> textOutput.appendText("Status: Connected\n\n"));
+    Platform.runLater(() -> textOutput.appendText("Name of suspect: (or \"exit\")\n"));
 
-
+        });
+        taskThread.start();
 
 
                 textInput.setOnKeyPressed(event -> {
@@ -127,19 +132,23 @@ public class ComputerGraphic
     {
         if(text.equals("Juan Alvarez"))
         {
-            //  try{waitSec(2000);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
-            textOutput.appendText("Name: Juan Alvarez"+ "\n");
-            textOutput.appendText("Date of birth: 16.08.2010"+ "\n");
-            textOutput.appendText("Known aliases: ---"+ "\n");
-            textOutput.appendText("Address: ---"+ "\n");
-            textOutput.appendText("Relatives: ---\n");
-            textOutput.appendText("Last bank statement:"+ "\n");
-            textOutput.appendText("Jim's storages - Ocean drive 308 - storage 619----------"+ "\n");
-            textOutput.appendText("Jul 15----------------------------------------------150đ"+ "\n");
-            textOutput.appendText("--------------------------------------------------------"+ "\n");
-            textOutput.appendText("Total-----------------------------------------------150đ\n");
-            textOutput.appendText("Name of suspect: (or \"exit\")\n");
-
+            Thread taskThread = new Thread(() -> {
+            try{Thread.sleep(1500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+            Platform.runLater(() -> {
+                        textOutput.appendText("Name: Juan Alvarez" + "\n");
+                        textOutput.appendText("Date of birth: 16.08.2010" + "\n");
+                        textOutput.appendText("Known aliases: ---" + "\n");
+                        textOutput.appendText("Address: ---" + "\n");
+                        textOutput.appendText("Relatives: ---\n");
+                        textOutput.appendText("Last bank statement:" + "\n");
+                        textOutput.appendText("Jim's storages - Ocean drive 308 - storage 619----------" + "\n");
+                        textOutput.appendText("Jul 15----------------------------------------------150đ" + "\n");
+                        textOutput.appendText("--------------------------------------------------------" + "\n");
+                        textOutput.appendText("Total-----------------------------------------------150đ\n");
+                        textOutput.appendText("Name of suspect: (or \"exit\")\n");
+                    });
+            });
+            taskThread.start();
             plan.getArea("Doky").setAccessibility(true);
             game.getController().update();
         }
@@ -181,11 +190,14 @@ public class ComputerGraphic
      */
     public void addressDecoderStart()
     {
+
         textOutput.appendText("Address Decoder v1.0"+ "\n");
-       // try{waitSec(1500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
-
-
-            textOutput.appendText("Enter encrypted data: (or \"exit\")"+ "\n");
+        Thread taskThread = new Thread(() -> {
+        try{Thread.sleep(1000);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+            Platform.runLater(() -> {textOutput.appendText("Enter encrypted data: (or \"exit\")"+ "\n");
+            });
+        });
+        taskThread.start();
 
         textInput.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -202,7 +214,7 @@ public class ComputerGraphic
     {
         if(text.equals("9badb16da5680244d928e1bd64e9157bbe063721158f0193ed29687ae565504f"))
         {
-            //  try{waitSec(3000);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+            try{Thread.sleep(1500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
             plan.getArea("Skrys").setAccessibility(true);
             textOutput.appendText( "Result:\nWillow st 256"+ "\n");
             textOutput.appendText("Enter encrypted data: (or \"exit\")"+ "\n");
@@ -215,7 +227,7 @@ public class ComputerGraphic
         }
         else
         {
-            // try{waitSec(3000);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
+             try{Thread.sleep(1500);}catch(InterruptedException e){System.out.println("");}//Nepotřebujeme nic dělat
             textOutput.appendText( "No result."+ "\n");
             textOutput.appendText("Enter encrypted data: (or \"exit\")"+ "\n");
         }

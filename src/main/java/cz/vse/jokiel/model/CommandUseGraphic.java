@@ -80,15 +80,20 @@ public class CommandUseGraphic implements ICommand
      */
     private String zbran()
     {
-        if(!game.getGamePlan().getCurrentArea().getNpcsInArea().isEmpty()) {
-            Iterator<NPC> iter = plan.getCurrentArea().getNpcsInArea().iterator();
-            NPC npc = iter.next();
-
-            game.setGameOver(true);
-            return "Zastřelil jsi " + npc.getName();
+        if(game.getGamePlan().getCurrentArea().getName().equals("Skrys")){
+            plan.setShootout(true);
+            return "Postřelil jsi pachatele do nohy. Je na zemi.\nZpoutej ho a odvez na stanici. Kluci ho vyslechnou a dají mu náplast.\n";
         }
-        else{
-            return "Vystřelil jsi.";
+        else {
+            if (!game.getGamePlan().getCurrentArea().getNpcsInArea().isEmpty()) {
+                Iterator<NPC> iter = plan.getCurrentArea().getNpcsInArea().iterator();
+                NPC npc = iter.next();
+
+                game.setGameOver(true);
+                return "Zastřelil jsi " + npc.getName();
+            } else {
+                return "Vystřelil jsi.";
+            }
         }
     }
     

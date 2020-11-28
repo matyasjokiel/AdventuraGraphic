@@ -4,15 +4,22 @@ package cz.vse.jokiel;
 import cz.vse.jokiel.main.Start;
 import cz.vse.jokiel.model.*;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Set;
 
 public class MainController {
@@ -41,6 +48,7 @@ public class MainController {
 
     public Button newGame;
     public Button help;
+    public Button aboutGame;
 
 
     public void init(IGame game) {
@@ -69,6 +77,34 @@ public class MainController {
         updateUse();
         toolBar();
         help();
+        aboutGame();
+
+        if(game.isGameOver())
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Konec hry");
+            alert.setHeaderText(null);
+            alert.setContentText("Konec hry. Díky, že jste zahráli.");
+
+            alert.showAndWait();
+            System.exit(0);
+        }
+    }
+
+    private void aboutGame() {
+        aboutGame.setOnMouseClicked(event -> {
+            Stage oHre = new Stage();
+            oHre.setTitle("Det. Meyers - o hře");
+            oHre.initModality(Modality.APPLICATION_MODAL);
+            WebView browser = new WebView();
+
+            WebEngine webEngine = browser.getEngine();
+            webEngine.load(getClass().getResource("/aboutGame.html").toString());
+            Scene scene = new Scene(browser);
+            oHre.setScene(scene);
+            oHre.show();
+
+        });
     }
 
     private void help() {
